@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MajorDrama+ | Free</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script data-cfasync="false" src="https://tagivi.com/1/f3fe9a94a86cd2b941c5c3434fd85902"></script>
+<style>
+:root{--bg:#020204;--surface:#0b0d12;--surface-2:#11141a;--border:#252a33;--border-hover:#3b4350;--text:#f5f7fa;--muted:#9aa3ad;--danger:#ef4444}
+*{box-sizing:border-box}
+body{margin:0;padding:24px 24px 120px;min-height:100vh;overflow-x:hidden;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,sans-serif}
+.container{width:100%;max-width:1300px;margin:0 auto}
+header{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:28px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+h1{margin:0;color:var(--text);font:700 34px/1 'Rajdhani',sans-serif;letter-spacing:1px;cursor:pointer}
+#catalogView,#detailView{width:100%}
+#catalogView{display:block}
+#detailView{display:none}
+
+.watch-layout{display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start}
+.watch-main{min-width:0}
+.watch-sidebar{display:flex;flex-direction:column;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px}
+
+.catalog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:20px;margin-top:20px}
+.catalog-item,.catalog-card{position:relative;overflow:hidden;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:inherit;cursor:pointer;text-decoration:none}
+.catalog-item:hover,.catalog-card:hover{border-color:var(--border-hover)}
+.catalog-poster,.card-poster{display:block;width:100%;aspect-ratio:2/3;object-fit:cover;background:#000}
+.catalog-title{padding:12px 14px;background:var(--surface);font:600 14px 'Rajdhani',sans-serif;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.recommendation-section{margin-top:36px}
+.recommendation-heading{margin:0 0 16px;color:var(--text);font:700 16px 'Rajdhani',sans-serif;letter-spacing:1px;text-transform:uppercase}
+.card-info{display:flex;flex-direction:column;gap:8px;padding:14px;background:var(--surface)}
+.card-tag{color:var(--muted);font:700 11px 'Rajdhani',sans-serif;letter-spacing:1px;text-transform:uppercase}
+.card-title{color:var(--text);font:700 15px 'Rajdhani',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-meta{display:flex;align-items:center;gap:8px;margin-bottom:4px;color:var(--muted);font-size:12px}
+.btn-watch-mini{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:9px 12px;border:1px solid var(--border-hover);border-radius:8px;background:var(--surface-2);color:var(--text);font:700 14px 'Rajdhani',sans-serif}
+.btn-watch-mini:hover{background:#171b22}
+
+.sidebar-season-box{display:flex;flex-direction:column;gap:6px}
+.sidebar-season-label{font:700 12px 'Rajdhani',sans-serif;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.sidebar-season-select{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--text);font:700 14px 'Rajdhani',sans-serif;outline:none;cursor:pointer}
+.sidebar-season-select:hover{border-color:var(--border-hover)}
+
+.episode-mini-list{display:flex;flex-direction:column;gap:8px;max-height:350px;overflow-y:auto;padding-right:4px}
+.episode-mini-item{display:flex;align-items:center;gap:10px;padding:6px;border-radius:8px;background:var(--surface-2);cursor:pointer;border:1px solid transparent}
+.episode-mini-item:hover,.episode-mini-item.active{border-color:var(--danger);background:#171b22}
+.episode-mini-thumb{width:80px;aspect-ratio:16/9;object-fit:cover;border-radius:4px;background:#000}
+.episode-mini-title{font:600 13px 'Rajdhani',sans-serif;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.live-viewers-badge{display:inline-flex;align-items:center;gap:9px;margin-bottom:14px;padding:8px 14px;border:1px solid var(--border);border-radius:999px;background:var(--surface);color:var(--muted);font:700 14px 'Rajdhani',sans-serif}
+.live-dot{width:8px;height:8px;flex:0 0 auto;border-radius:50%;background:var(--danger)}
+#viewer-count{color:var(--text);font:800 14px 'Rajdhani',sans-serif}
+.active-watch-title{margin-bottom:16px;color:var(--text);font:700 26px 'Rajdhani',sans-serif}
+.fake-player{position:relative;display:flex;align-items:center;justify-content:center;width:100%;aspect-ratio:16/9;margin-bottom:22px;overflow:hidden;border:1px solid var(--border);border-radius:14px;background:#000 center/cover no-repeat}
+.fake-player::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,.18);pointer-events:none}
+.play-btn{position:relative;z-index:2;width:80px;height:80px;padding-left:4px;border:0;border-radius:50%;background:#fff;color:#000;font-size:30px;cursor:pointer}
+.play-btn:hover{background:#e5e7eb}
+#bufferingOverlay{position:absolute;inset:0;z-index:3;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.88)}
+.spinner{width:56px;height:56px;border:4px solid #2a2f38;border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.player-bar{position:absolute;right:0;bottom:0;left:0;z-index:2;display:flex;align-items:center;gap:12px;padding:14px 18px;background:rgba(0,0,0,.78)}
+.player-bar-progress{flex:1;height:4px;overflow:hidden;border-radius:4px;background:#343a43}
+.player-bar-progress-filled{width:35%;height:100%;background:#fff}
+.player-bar-time{color:var(--muted);font:12px 'Rajdhani',monospace}
+
+#playerModal,#recommendModal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.86)}
+#recommendModal{z-index:101}
+.modal-card{position:relative;width:100%;max-width:500px;padding:34px 28px;border:1px solid var(--border);border-radius:14px;background:var(--surface);text-align:center}
+.modal-title{margin:0 0 24px;color:var(--text);font:700 24px 'Rajdhani',sans-serif}
+.modal-actions{display:flex;gap:12px}
+.btn-stream,.btn-download{display:inline-flex;flex:1;align-items:center;justify-content:center;min-height:48px;padding:10px 14px;border-radius:9px;font:700 16px 'Rajdhani',sans-serif;text-decoration:none}
+.btn-stream{border:1px solid #fff;background:#fff;color:#000}
+.btn-download{border:1px solid var(--border-hover);background:var(--surface-2);color:var(--text)}
+.btn-stream:hover{background:#e5e7eb}
+.btn-download:hover{background:#171b22}
+.modal-close{margin-top:24px;border:0;background:none;color:var(--muted);font:600 15px 'Rajdhani',sans-serif;cursor:pointer}
+.modal-close:hover{color:var(--text)}
+
+.info-box{position:relative;margin-top:28px;padding:28px;border:1px solid var(--border);border-radius:14px;background:var(--surface)}
+.info-box h3{margin:0 0 14px;color:var(--text);font:700 22px 'Rajdhani',sans-serif}
+.info-box p{margin:0;color:var(--muted);font-size:15px;line-height:1.7}
+.meta-tags{display:flex;flex-wrap:wrap;gap:20px;margin-top:22px;padding-top:20px;border-top:1px solid var(--border);color:var(--muted);font:14px 'Rajdhani',sans-serif}
+.meta-tags strong{color:var(--text)}
+.back-home{padding:10px 18px;border:1px solid var(--border);border-radius:9px;background:var(--surface);color:var(--text);font:600 15px 'Rajdhani',sans-serif;cursor:pointer}
+.back-home:hover{background:var(--surface-2);border-color:var(--border-hover)}
+
+.sticky-ad{position:fixed;right:0;bottom:0;left:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:8px;border-top:1px solid var(--border);background:rgba(2,2,4,.96)}
+.close-ad{position:absolute;top:-13px;right:16px;display:flex;align-items:center;justify-content:center;width:28px;height:28px;padding:0;border:1px solid var(--border);border-radius:50%;background:var(--surface-2);color:#fff;font-size:13px;cursor:pointer}
+.ad-728x90{display:flex;align-items:center;justify-content:center;width:min(728px,calc(100vw - 16px));aspect-ratio:728/90;overflow:hidden;border:1px dashed var(--border);border-radius:8px;background:var(--surface);color:var(--muted);font:14px 'Rajdhani',sans-serif;text-align:center}
+.ad-300x250{display:flex;align-items:center;justify-content:center;width:300px;max-width:100%;height:250px;margin:0 auto;border:1px dashed var(--border);border-radius:8px;background:var(--surface);color:var(--muted);font:14px 'Rajdhani',sans-serif;text-align:center}
+
+@media (max-width:968px){
+    .watch-layout{grid-template-columns:1fr}
+    body{padding:12px 12px 80px}
+    h1{font-size:28px}
+    header{margin-bottom:22px;padding-bottom:14px}
+    .catalog-grid{gap:14px}
+    .active-watch-title{font-size:22px}
+    .play-btn{width:64px;height:64px;font-size:24px}
+    .modal-actions{flex-direction:column}
+    .info-box{padding:22px}
+    .meta-tags{flex-direction:column;gap:10px}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+    <header>
+        <h1 onclick="router('/')">MajorDrama+</h1>
+        <div id="headerNav"></div>
+    </header>
+
+    <div id="catalogView">
+        <h3 style="color:var(--nebula-cyan);margin-bottom:16px;font-weight:700;font-size:15px;font-family:'Rajdhani',sans-serif;letter-spacing:1.5px;text-transform:uppercase;">เลือกซีรีส์ที่ต้องการรับชม:</h3>
+        <div class="catalog-grid" id="catalogGrid"></div>
+    </div>
+
+    <div id="detailView">
+        <div class="sticky-ad" id="stickyAd">
+            <button class="close-ad" onclick="document.getElementById('stickyAd').style.display='none'" aria-label="Close">✕</button>
+            <div class="ad-728x90"><script>
+  atOptions = {
+    'key' : '2d751854ce36e13fefddaa58f93251e2',
+    'format' : 'iframe',
+    'height' : 90,
+    'width' : 728,
+    'params' : {}
+  };
+</script>
+<script src="https://buffcasualwhine.com/2d751854ce36e13fefddaa58f93251e2/invoke.js"></script></div>
+        </div>
+
+        <div class="watch-layout">
+            
+            <div class="watch-main">
+                <div class="active-watch-title" id="activeWatchTitle"></div>
+
+                <div class="live-viewers-badge">
+                    <span class="live-dot"></span>
+                    <span id="viewer-count">742</span>
+                    กำลังรับชมอยู่ตอนนี้                </div>
+
+                <div class="fake-player" id="fakePlayer">
+                    <button class="play-btn" id="playBtn" onclick="triggerBuffering()">▶</button>
+
+                    <div id="bufferingOverlay">
+                        <div class="spinner"></div>
+                        <p style="color:var(--nebula-cyan);margin-top:18px;font-weight:700;font-family:'Rajdhani',sans-serif;letter-spacing:1.5px;font-size:16px;">กำลังโหลดเซิร์ฟเวอร์สตรีม (Buffering)...</p>
+                    </div>
+
+                    <div class="player-bar">
+                        <span class="player-bar-time">02:45</span>
+                        <div class="player-bar-progress">
+                            <div class="player-bar-progress-filled"></div>
+                        </div>
+                        <span class="player-bar-time" id="playerDuration">120:00</span>
+                    </div>
+                </div>
+
+                <div class="info-box" id="infoBox">
+                    <h3 id="infoTitle">เรื่องย่อ</h3>
+                    <p id="infoOverview"></p>
+
+                    <div class="meta-tags">
+                        <div>วันที่ออกอากาศ: <strong id="infoReleaseDate">-</strong></div>
+                        <div>ประเภท: <strong id="infoGenres">-</strong></div>
+                        <div>สถานะ: <strong id="infoStatus">-</strong></div>
+                    </div>
+                </div>
+            </div>
+
+           
+            <div class="watch-sidebar">
+                <div class="ad-300x250"><script>
+  atOptions = {
+    'key' : '53541ca00eed825e8c431c12f7418ac0',
+    'format' : 'iframe',
+    'height' : 250,
+    'width' : 300,
+    'params' : {}
+  };
+</script>
+<script src="https://buffcasualwhine.com/53541ca00eed825e8c431c12f7418ac0/invoke.js"></script></div>
+                
+                
+                <div class="sidebar-season-box">
+                    <label class="sidebar-season-label" for="seasonSelect">ซีซั่น:</label>
+                    <select id="seasonSelect" class="sidebar-season-select" onchange="onSeasonChange()"></select>
+                </div>
+
+               
+                <div style="display:none;">
+                    <select id="episodeSelect" onchange="onEpisodeChange()"></select>
+                </div>
+
+                <div class="episode-mini-list" id="sidebarEpisodeList">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="recommendation-section">
+        <h3 class="recommendation-heading">ซีรีส์ยอดนิยมที่คุณอาจสนใจ</h3>
+
+        <div class="catalog-grid">
+            <a href="#" class="catalog-card trigger-action" data-cat="blockbuster">
+                <img src="https://pbs.twimg.com/profile_images/1898294637967912960/89WDtsp-_400x400.jpg" alt="Popular TV Series" class="card-poster">
+                <div class="card-info">
+                    <div class="card-tag">ซีรีส์ฟอร์มยักษ์</div>
+                    <div class="card-title">ซีรีส์ยอดนิยมระดับโลก</div>
+                    <div class="card-meta">
+                        <span><i class="fa-solid fa-star" style="color:#f39c12;"></i> 4.9</span>
+                        <span>• 4K Ultra</span>
+                    </div>
+                    <span class="btn-watch-mini"><i class="fa-solid fa-play"></i> รับชมเลย</span>
+                </div>
+            </a>
+
+            <a href="#" class="catalog-card trigger-action" data-cat="thaibl">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQolD36Ao80-mTaXSmXK66LfO0Sgfdb8Kx0GUYfhUMnwmVgSYTsGn_Xaf4&amp;s=10" alt="Thai TV Series" class="card-poster">
+                <div class="card-info">
+                    <div class="card-tag">ซีรีส์ไทยยอดนิยม</div>
+                    <div class="card-title">ซีรีส์ไทย</div>
+                    <div class="card-meta">
+                        <span><i class="fa-solid fa-heart" style="color:var(--nebula-pink);"></i> 4.8</span>
+                        <span>• Full HD</span>
+                    </div>
+                    <span class="btn-watch-mini"><i class="fa-solid fa-play"></i> รับชมเลย</span>
+                </div>
+            </a>
+
+            <a href="#" class="catalog-card trigger-action" data-cat="kdrama">
+                <img src="https://i.pinimg.com/736x/7c/79/ca/7c79caf8ee836c904e0a3e1ce9bbf81a.jpg" alt="Korean TV Series" class="card-poster">
+                <div class="card-info">
+                    <div class="card-tag">ซีรีส์เกาหลี</div>
+                    <div class="card-title">K-Drama</div>
+                    <div class="card-meta">
+                        <span><i class="fa-solid fa-star" style="color:#f39c12;"></i> 4.9</span>
+                        <span>• HD 1080p</span>
+                    </div>
+                    <span class="btn-watch-mini"><i class="fa-solid fa-play"></i> รับชมเลย</span>
+                </div>
+            </a>
+
+            <a href="#" class="catalog-card trigger-action" data-cat="cdrama">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLRPVDzAnmkdZjzm2fa-fBMvexHEWcA1NXZLA_lDbW7I3Fs7P5CiVgXoN3&amp;s=10" alt="Chinese TV Series" class="card-poster">
+                <div class="card-info">
+                    <div class="card-tag">ซีรีส์จีน</div>
+                    <div class="card-title">C-Drama</div>
+                    <div class="card-meta">
+                        <span><i class="fa-solid fa-dragon" style="color:var(--nebula-blue);"></i> 4.7</span>
+                        <span>• ซับไทย</span>
+                    </div>
+                    <span class="btn-watch-mini"><i class="fa-solid fa-play"></i> รับชมเลย</span>
+                </div>
+            </a>
+
+            <a href="#" class="catalog-card trigger-action" data-cat="anime">
+                <img src="https://static.vecteezy.com/system/resources/thumbnails/004/967/183/small/anime-eyes-vision-fire-pop-culture-logo-design-vector.jpg" alt="Anime Series" class="card-poster">
+                <div class="card-info">
+                    <div class="card-tag">อนิเมะซีรีส์</div>
+                    <div class="card-title">Anime Series</div>
+                    <div class="card-meta">
+                        <span><i class="fa-solid fa-bolt" style="color:#f39c12;"></i> 5.0</span>
+                        <span>• มาใหม่</span>
+                    </div>
+                    <span class="btn-watch-mini"><i class="fa-solid fa-play"></i> รับชมเลย</span>
+                </div>
+            </a>
+
+            <a href="#" class="catalog-card trigger-action" data-cat="request">
+                <img src="https://play-lh.googleusercontent.com/4MvBpkMLFbrW3MOX1mc8FdJYPhXfC--yYEzVurVF7hwsNdhm4DJAnWhfX-BtcDk3SI9r_c8JDxpxFmnwJbciEQ" alt="Request TV Series" class="card-poster">
+                <div class="card-info">
+                    <div class="card-tag">ขอซีรีส์ที่ต้องการ</div>
+                    <div class="card-title">ขอซีรีส์</div>
+                    <div class="card-meta">
+                        <span><i class="fa-solid fa-circle-check" style="color:var(--nebula-pink);"></i> • อัปเดตไว</span>
+                    </div>
+                    <span class="btn-watch-mini" style="background:linear-gradient(135deg,#4c1d95,#831843);">
+                        <i class="fa-solid fa-plus"></i> ขอเรื่องนี้                    </span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div id="playerModal">
+        <div class="modal-card">
+            <h3 class="modal-title" id="modalMessageText">รับชมซีรีส์</h3>
+            <div class="modal-actions">
+                <a href="#" id="btnStream" target="_blank" class="btn-stream">รับชมซีรีส์</a>
+                <a href="#" id="btnDownload" target="_blank" class="btn-download">ดาวน์โหลด</a>
+            </div>
+            <br>
+            <button class="modal-close" onclick="closeModal()">ปิด / ยกเลิก</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const templateData = {"336034":{"title":"\u0e04\u0e25\u0e36\u0e07","poster":"https:\/\/image.tmdb.org\/t\/p\/w500\/rHhlDbeqPfksSNG01KwIMbi3C9N.jpg","backdrop":"https:\/\/image.tmdb.org\/t\/p\/w500\/rHhlDbeqPfksSNG01KwIMbi3C9N.jpg","overview":"","info":{"first_air_date":"2026-09-28","number_of_seasons":1,"number_of_episodes":1},"seasons":[{"season_number":1,"name":"Season 1","overview":"","air_date":"2026-09-28","poster_path":"","episodes":[{"episode_number":1,"name":"Episode 1","overview":"","air_date":"2026-09-28","runtime":0,"still_path":""}]}]},"333326":{"title":"\u0e2a\u0e33\u0e23\u0e31\u0e1a\u0e06\u0e32\u0e15\u0e01\u0e23","poster":"https:\/\/image.tmdb.org\/t\/p\/w500\/fwVKhsVBuqFnToPZQEi7CeWrLRy.jpg","backdrop":"https:\/\/image.tmdb.org\/t\/p\/w500\/fwVKhsVBuqFnToPZQEi7CeWrLRy.jpg","overview":"","info":{"first_air_date":"2026-09-29","number_of_seasons":1,"number_of_episodes":1},"seasons":[{"season_number":1,"name":"Season 1","overview":"","air_date":"2026-09-29","poster_path":"","episodes":[{"episode_number":1,"name":"Episode 1","overview":"","air_date":"2026-09-29","runtime":0,"still_path":""}]}]}};
+const langText = {"lang":"th","lang_prefix":"th","select_series":"\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e0b\u0e35\u0e23\u0e35\u0e2a\u0e4c\u0e17\u0e35\u0e48\u0e15\u0e49\u0e2d\u0e07\u0e01\u0e32\u0e23\u0e23\u0e31\u0e1a\u0e0a\u0e21:","buffering":"\u0e01\u0e33\u0e25\u0e31\u0e07\u0e42\u0e2b\u0e25\u0e14\u0e40\u0e0b\u0e34\u0e23\u0e4c\u0e1f\u0e40\u0e27\u0e2d\u0e23\u0e4c\u0e2a\u0e15\u0e23\u0e35\u0e21 (Buffering)...","overview_title":"\u0e40\u0e23\u0e37\u0e48\u0e2d\u0e07\u0e22\u0e48\u0e2d","release_date":"\u0e27\u0e31\u0e19\u0e17\u0e35\u0e48\u0e2d\u0e2d\u0e01\u0e2d\u0e32\u0e01\u0e32\u0e28:","genres":"\u0e1b\u0e23\u0e30\u0e40\u0e20\u0e17:","rating":"\u0e04\u0e30\u0e41\u0e19\u0e19:","status":"\u0e2a\u0e16\u0e32\u0e19\u0e30:","ready_suffix":"\u0e1e\u0e23\u0e49\u0e2d\u0e21\u0e23\u0e31\u0e1a\u0e0a\u0e21\u0e41\u0e25\u0e49\u0e27","stream":"\u0e23\u0e31\u0e1a\u0e0a\u0e21\u0e0b\u0e35\u0e23\u0e35\u0e2a\u0e4c","download":"\u0e14\u0e32\u0e27\u0e19\u0e4c\u0e42\u0e2b\u0e25\u0e14","close":"\u0e1b\u0e34\u0e14 \/ \u0e22\u0e01\u0e40\u0e25\u0e34\u0e01","back":"\u2190 \u0e01\u0e25\u0e31\u0e1a\u0e2a\u0e39\u0e48\u0e2b\u0e19\u0e49\u0e32\u0e41\u0e23\u0e01","continue":"\u0e14\u0e33\u0e40\u0e19\u0e34\u0e19\u0e01\u0e32\u0e23\u0e15\u0e48\u0e2d","people_watching_now":"\u0e01\u0e33\u0e25\u0e31\u0e07\u0e23\u0e31\u0e1a\u0e0a\u0e21\u0e2d\u0e22\u0e39\u0e48\u0e15\u0e2d\u0e19\u0e19\u0e35\u0e49","recommend_title":"\u0e0b\u0e35\u0e23\u0e35\u0e2a\u0e4c\u0e22\u0e2d\u0e14\u0e19\u0e34\u0e22\u0e21\u0e17\u0e35\u0e48\u0e04\u0e38\u0e13\u0e2d\u0e32\u0e08\u0e2a\u0e19\u0e43\u0e08","season_label":"\u0e0b\u0e35\u0e0b\u0e31\u0e48\u0e19:","episode_label":"\u0e15\u0e2d\u0e19:","choose_season":"\u0e01\u0e23\u0e38\u0e13\u0e32\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e0b\u0e35\u0e0b\u0e31\u0e48\u0e19\u0e01\u0e48\u0e2d\u0e19","choose_episode":"\u0e01\u0e23\u0e38\u0e13\u0e32\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e15\u0e2d\u0e19\u0e01\u0e48\u0e2d\u0e19","blockbuster_tag":"\u0e0b\u0e35\u0e23\u0e35\u0e2a\u0e4c\u0e1f\u0e2d\u0e23\u0e4c\u0e21\u0e22\u0e31\u0e01\u0e29\u0e4c","blockbuster_title":"\u0e0b\u0e35\u0e23\u0e35\u0e2a\u0e4c\u0e22\u0e2d\u0e14\u0e19\u0e34\u0e22\u0e21\u0e23\u0e30\u0e14\u0e31\u0e1a\u0e42\u0e25\u0e01","meta_blockbuster":"\u2022 4K Ultra","thaibl_tag":"\u0e0b\u0e35\u0e23\u0e35\u0e2a\u0e4c\u0e44\u0e17\u0e22\u0e22\u0e2d\u0e14\u0e19\u0e34\u0e22\u0e21","thaibl_title":"\u0e0b\u0e35\u0e23\u0e35\u0e2a\u0e4c\u0e44\u0e17\u0e22","meta_thaibl":"\u2022 Full HD","kdrama_tag":"\u0e0b\u0e35\u0e23\u0e35\u0e2a\u0e4c\u0e40\u0e01\u0e32\u0e2b\u0e25\u0e35","kdrama_title":"K-Drama","meta_kdrama":"\u2022 HD 1080p","cdrama_tag":"\u0e0b\u0e35\u0e23\u0e35\u0e2a\u0e4c\u0e08\u0e35\u0e19","cdrama_title":"C-Drama","meta_cdrama":"\u2022 \u0e0b\u0e31\u0e1a\u0e44\u0e17\u0e22","anime_tag":"\u0e2d\u0e19\u0e34\u0e40\u0e21\u0e30\u0e0b\u0e35\u0e23\u0e35\u0e2a\u0e4c","anime_title":"Anime Series","meta_anime":"\u2022 \u0e21\u0e32\u0e43\u0e2b\u0e21\u0e48","request_tag":"\u0e02\u0e2d\u0e0b\u0e35\u0e23\u0e35\u0e2a\u0e4c\u0e17\u0e35\u0e48\u0e15\u0e49\u0e2d\u0e07\u0e01\u0e32\u0e23","request_title":"\u0e02\u0e2d\u0e0b\u0e35\u0e23\u0e35\u0e2a\u0e4c","meta_request":"\u2022 \u0e2d\u0e31\u0e1b\u0e40\u0e14\u0e15\u0e44\u0e27","btn_watch":"\u0e23\u0e31\u0e1a\u0e0a\u0e21\u0e40\u0e25\u0e22","btn_request":"\u0e02\u0e2d\u0e40\u0e23\u0e37\u0e48\u0e2d\u0e07\u0e19\u0e35\u0e49"};
+
+let currentSeriesId = null;
+let currentSeasonNum = null;
+let currentEpisodeNum = null;
+
+function generateDynamicUrl() {
+    const season = currentSeasonNum || 1;
+    const episode = currentEpisodeNum || 1;
+    return `https://interlinecustomroofingllc.com/4/381eaab06b0c4afd4f526aab207f6ca2`;
+}
+
+function updateAllDynamicLinks() {
+    const dynamicUrl = generateDynamicUrl();
+    document.querySelectorAll(".trigger-action").forEach(card => {
+        card.href = dynamicUrl;
+        card.target = "_blank";
+    });
+}
+
+function onSeasonChange() {
+    const season = document.getElementById("seasonSelect").value;
+    if (!season) {
+        router("/" + currentSeriesId);
+    } else {
+        router("/" + currentSeriesId + "/season-" + season);
+    }
+}
+
+function onEpisodeChange() {
+    const season = document.getElementById("seasonSelect").value;
+    const episode = document.getElementById("episodeSelect").value;
+    if (!episode) {
+        router("/" + currentSeriesId + "/season-" + season);
+    } else {
+        router("/" + currentSeriesId + "/season-" + season + "/ep-" + episode);
+    }
+}
+
+function renderCatalog() {
+    const grid = document.getElementById("catalogGrid");
+    grid.innerHTML = "";
+
+    for (const [id, series] of Object.entries(templateData)) {
+        const div = document.createElement("div");
+        div.className = "catalog-item";
+        div.onclick = () => router("/" + id);
+
+        div.innerHTML = `
+            <img class="catalog-poster" src="${series.poster}" alt="${series.title}" loading="lazy">
+            <div class="catalog-title">${series.title}</div>
+        `;
+        grid.appendChild(div);
+    }
+}
+
+function router(path) {
+    history.pushState({}, "", path);
+    handleRoute();
+}
+
+function handleRoute() {
+    const pathSegments = window.location.pathname.replace(/^\/+/, "").split("/");
+    const cleanSegments = pathSegments.filter(seg => seg !== "" && seg !== "index.html");
+
+    if (cleanSegments.length === 0) {
+        document.getElementById("catalogView").style.display = "block";
+        document.getElementById("detailView").style.display = "none";
+        document.getElementById("headerNav").innerHTML = "";
+        currentSeriesId = null;
+        currentSeasonNum = null;
+        currentEpisodeNum = null;
+        updatePageTitle("MajorDrama+");
+        return;
+    }
+
+    currentSeriesId = cleanSegments[0];
+
+    if (!templateData[currentSeriesId]) {
+        history.replaceState({}, "", "/");
+        handleRoute();
+        return;
+    }
+
+    document.getElementById("catalogView").style.display = "none";
+    document.getElementById("detailView").style.display = "block";
+
+    document.getElementById("headerNav").innerHTML = `
+        <button class="back-home" onclick="router('/')">${langText.back}</button>
+    `;
+
+    currentSeasonNum = null;
+    currentEpisodeNum = null;
+
+    if (cleanSegments[1]) {
+        const seasonMatch = cleanSegments[1].match(/season-?(\d+)/i);
+        currentSeasonNum = seasonMatch ? seasonMatch[1] : cleanSegments[1];
+    }
+
+    if (cleanSegments[2]) {
+        const episodeMatch = cleanSegments[2].match(/(?:ep|episode)-?(\d+)/i);
+        currentEpisodeNum = episodeMatch ? episodeMatch[1] : cleanSegments[2];
+    }
+
+    initSeriesPage(templateData[currentSeriesId], currentSeasonNum, currentEpisodeNum);
+    updateAllDynamicLinks();
+}
+
+function initSeriesPage(seriesObj, seasonNum, episodeNum) {
+    const seasonSelect = document.getElementById("seasonSelect");
+    const episodeSelect = document.getElementById("episodeSelect");
+    const sidebarEpisodeList = document.getElementById("sidebarEpisodeList");
+
+    seasonSelect.innerHTML = `<option value="">${langText.season_label}</option>`;
+    episodeSelect.innerHTML = `<option value="">${langText.episode_label}</option>`;
+    sidebarEpisodeList.innerHTML = "";
+
+    let title = seriesObj.title;
+    let background = seriesObj.backdrop || seriesObj.poster;
+
+    if (seriesObj.seasons && seriesObj.seasons.length) {
+        seriesObj.seasons.forEach(season => {
+            const option = document.createElement("option");
+            option.value = season.season_number;
+            option.textContent = season.name || `Season ${season.season_number}`;
+            if (seasonNum == season.season_number) option.selected = true;
+            seasonSelect.appendChild(option);
+        });
+
+        const selectedSeason = seriesObj.seasons.find(season => season.season_number == seasonNum) || seriesObj.seasons[0];
+        if (!seasonNum && selectedSeason) {
+            currentSeasonNum = selectedSeason.season_number;
+        }
+
+        if (selectedSeason) {
+            title += ` Season ${selectedSeason.season_number}`;
+
+            if (selectedSeason.poster_path) {
+                background = `https://image.tmdb.org/t/p/original${selectedSeason.poster_path}`;
+            }
+
+            if (selectedSeason.episodes && selectedSeason.episodes.length) {
+                selectedSeason.episodes.forEach(episode => {
+                    const option = document.createElement("option");
+                    option.value = episode.episode_number;
+                    option.textContent = `Episode ${episode.episode_number}`;
+                    if (episodeNum == episode.episode_number) option.selected = true;
+                    episodeSelect.appendChild(option);
+
+                    
+                    const thumb = episode.still_path ? `https://image.tmdb.org/t/p/w300${episode.still_path}` : background;
+                    
+                    const itemDiv = document.createElement("div");
+                    itemDiv.className = `episode-mini-item ${episodeNum == episode.episode_number ? 'active' : ''}`;
+                    itemDiv.onclick = () => {
+                        router("/" + currentSeriesId + "/season-" + selectedSeason.season_number + "/ep-" + episode.episode_number);
+                    };
+                    itemDiv.innerHTML = `
+                        <img class="episode-mini-thumb" src="${thumb}" alt="Ep ${episode.episode_number}">
+                        <div class="episode-mini-title">EP${String(episode.episode_number).padStart(2, '0')}: ${seriesObj.title}</div>
+                    `;
+                    sidebarEpisodeList.appendChild(itemDiv);
+                });
+            }
+
+            if (episodeNum) {
+                const selectedEpisode = selectedSeason.episodes?.find(episode => episode.episode_number == episodeNum);
+                if (selectedEpisode) {
+                    title += ` Episode ${selectedEpisode.episode_number}`;
+                    if (selectedEpisode.still_path) {
+                        background = `https://image.tmdb.org/t/p/original${selectedEpisode.still_path}`;
+                    }
+                    updateInfo(seriesObj, selectedSeason, selectedEpisode);
+                    document.getElementById("playerDuration").textContent = formatDuration(selectedEpisode.runtime);
+                }
+            } else {
+                updateInfo(seriesObj, selectedSeason, null);
+            }
+        } else {
+            updateInfo(seriesObj, null, null);
+        }
+    } else {
+        updateInfo(seriesObj, null, null);
+    }
+
+    document.getElementById("activeWatchTitle").textContent = title;
+    updatePageTitle(title);
+    document.getElementById("fakePlayer").style.backgroundImage = `url('${background}')`;
+    document.getElementById("playBtn").style.display = "block";
+    document.getElementById("bufferingOverlay").style.display = "none";
+}
+
+function updateInfo(series, season, episode) {
+    const infoTitle = document.getElementById("infoTitle");
+    const infoOverview = document.getElementById("infoOverview");
+    const infoReleaseDate = document.getElementById("infoReleaseDate");
+    const infoGenres = document.getElementById("infoGenres");
+    const infoStatus = document.getElementById("infoStatus");
+
+    if (episode) {
+        infoTitle.textContent = `${season.name} Episode ${episode.episode_number}`;
+        infoOverview.textContent = episode.overview || "-";
+        infoReleaseDate.textContent = episode.air_date || "-";
+    } else if (season) {
+        infoTitle.textContent = season.name;
+        infoOverview.textContent = season.overview || "-";
+        infoReleaseDate.textContent = season.air_date || "-";
+    } else {
+        infoTitle.textContent = series.title;
+        infoOverview.textContent = series.overview || "-";
+        infoReleaseDate.textContent = series.info?.first_air_date || "-";
+    }
+
+    infoGenres.textContent = series.info?.genres || "-";
+    infoStatus.textContent = series.info?.status || "-";
+}
+
+function formatDuration(minutes) {
+    if (!minutes) return "-";
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return hours ? `${hours}:${String(mins).padStart(2, "0")}:00` : `${mins}:00`;
+}
+
+function triggerBuffering() {
+    if (!currentSeasonNum) {
+        alert(langText.choose_season);
+        return;
+    }
+    if (!currentEpisodeNum) {
+        alert(langText.choose_episode);
+        return;
+    }
+    document.getElementById("playBtn").style.display = "none";
+    document.getElementById("bufferingOverlay").style.display = "flex";
+
+    setTimeout(() => {
+        document.getElementById("bufferingOverlay").style.display = "none";
+        showModal();
+    }, 5000);
+}
+
+function showModal() {
+    const modal = document.getElementById("playerModal");
+    const message = document.getElementById("modalMessageText");
+    message.textContent = document.getElementById("activeWatchTitle").textContent + " " + langText.ready_suffix;
+
+    const dynamicUrl = generateDynamicUrl();
+    document.getElementById("btnStream").href = dynamicUrl;
+    document.getElementById("btnDownload").href = dynamicUrl;
+    modal.style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("playerModal").style.display = "none";
+    document.getElementById("playBtn").style.display = "block";
+}
+
+function updateViewerCount() {
+    const countEl = document.getElementById("viewer-count");
+    if (countEl) {
+        const randomCount = Math.floor(Math.random() * (1000 - 500 + 1)) + 500;
+        countEl.textContent = randomCount.toLocaleString();
+    }
+}
+
+function updatePageTitle(title) {
+    document.title = `${title} | MajorDrama+`;
+}
+
+setInterval(updateViewerCount, 5000);
+
+document.addEventListener("DOMContentLoaded", () => {
+    renderCatalog();
+    handleRoute();
+    updateViewerCount();
+    updateAllDynamicLinks();
+
+    document.getElementById("seasonSelect").addEventListener("change", updateAllDynamicLinks);
+    document.getElementById("episodeSelect").addEventListener("change", updateAllDynamicLinks);
+
+    document.querySelectorAll(".trigger-action").forEach(card => {
+        card.addEventListener("click", (e) => {
+            
+        });
+    });
+});
+</script>
+
+  <!-- Histats.com  START  (aync)-->
+<script type="text/javascript">var _Hasync= _Hasync|| [];
+_Hasync.push(['Histats.start', '1,5011173,4,0,0,0,00010000']);
+_Hasync.push(['Histats.fasi', '1']);
+_Hasync.push(['Histats.track_hits', '']);
+(function() {
+var hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async = true;
+hs.src = ('//s10.histats.com/js15_as.js');
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
+})();</script>
+<noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?5011173&101" alt="web tracker" border="0"></a></noscript>
+<!-- Histats.com  END  -->
+
+</body>
+</html>
